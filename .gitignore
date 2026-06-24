@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Data (runtime)
+data/memory.db
+data/knowledge_graph.db
+data/chroma_db/
+data/audio/
+data/knowledge/wikipedia/
+data/knowledge/wikipedia_ru/
+
+# Models
+models/*.bin
+models/*.gguf
+models/*.pt
+
+# APKs
+*.apk
+
+# ZIM files (too large for git)
+data/knowledge/zim_loader/*.zim
+
+# Logs
+*.log
+server_stdout.log
+server_stderr.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Flutter
+client/flutter/.dart_tool/
+client/flutter/build/
+client/flutter/.flutter-plugins
+client/flutter/.flutter-plugins-dependencies
+client/flutter/android/.gradle/
+client/flutter/android/app/build/
+client/flutter/android/local.properties
+client/flutter/ios/Pods/
+client/flutter/ios/.symlinks/
+
+# Electron
+client/node_modules/
+client/dist/
+
+# Temp
+~/
+*.tmp
+*.bak
