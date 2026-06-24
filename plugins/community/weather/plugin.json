@@ -1,0 +1,1 @@
+{"name": "weather", "version": "1.0.0", "description": "Погода: текущая, прогноз, уведомления", "author": "jarvis-community", "dependencies": ["httpx"], "permissions": ["events", "cache", "notifications"], "api_version": "1.0", "min_jarvis_version": "3.1", "enabled": true}

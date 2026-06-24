@@ -1,0 +1,75 @@
+{
+  "version": "1.0",
+  "plugins": [
+    {
+      "name": "weather",
+      "manifest": {
+        "name": "weather",
+        "version": "1.0.0",
+        "description": "Погода: текущая, прогноз, уведомления",
+        "author": "jarvis-community",
+        "dependencies": ["httpx"],
+        "permissions": ["events", "cache", "notifications"],
+        "api_version": "1.0",
+        "min_jarvis_version": "3.1",
+        "enabled": true
+      }
+    },
+    {
+      "name": "reminders",
+      "manifest": {
+        "name": "reminders",
+        "version": "1.0.0",
+        "description": "Напоминания: одноразовые и повторяющиеся",
+        "author": "jarvis-community",
+        "dependencies": [],
+        "permissions": ["events", "cache", "notifications"],
+        "api_version": "1.0",
+        "min_jarvis_version": "3.1",
+        "enabled": true
+      }
+    },
+    {
+      "name": "clipboard",
+      "manifest": {
+        "name": "clipboard",
+        "version": "1.0.0",
+        "description": "Буфер обмена: история, поиск, pin",
+        "author": "jarvis-community",
+        "dependencies": [],
+        "permissions": ["events", "cache"],
+        "api_version": "1.0",
+        "min_jarvis_version": "3.1",
+        "enabled": true
+      }
+    },
+    {
+      "name": "system_stats",
+      "manifest": {
+        "name": "system_stats",
+        "version": "1.0.0",
+        "description": "Мониторинг системы: CPU, RAM, диск, сеть",
+        "author": "jarvis-community",
+        "dependencies": ["psutil"],
+        "permissions": ["events", "cache"],
+        "api_version": "1.0",
+        "min_jarvis_version": "3.1",
+        "enabled": true
+      }
+    },
+    {
+      "name": "todo",
+      "manifest": {
+        "name": "todo",
+        "version": "1.0.0",
+        "description": "Список задач: добавление, статус, приоритеты",
+        "author": "jarvis-community",
+        "dependencies": [],
+        "permissions": ["events", "cache"],
+        "api_version": "1.0",
+        "min_jarvis_version": "3.1",
+        "enabled": true
+      }
+    }
+  ]
+}

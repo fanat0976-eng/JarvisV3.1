@@ -1,0 +1,79 @@
+{
+  "spec_version": "2026-03-15",
+  "categories": [
+    {
+      "name": "Medicine",
+      "slug": "medicine",
+      "icon": "stethoscope",
+      "description": "Medical references, guides, and encyclopedias",
+      "resources": [
+        {"id": "zimgit-medicine_en", "version": "2024-08", "title": "Medical Library", "description": "Field and emergency medicine books", "url": "https://download.kiwix.org/zim/other/zimgit-medicine_en_2024-08.zim", "size_mb": 67},
+        {"id": "nhs.uk_en_medicines", "version": "2025-12", "title": "NHS Medicines A to Z", "description": "How medicines work, dosages, side effects", "url": "https://download.kiwix.org/zim/zimit/nhs.uk_en_medicines_2025-12.zim", "size_mb": 16},
+        {"id": "fas-military-medicine_en", "version": "2025-06", "title": "Military Medicine", "description": "Tactical and field medicine manuals", "url": "https://download.kiwix.org/zim/zimit/fas-military-medicine_en_2025-06.zim", "size_mb": 78},
+        {"id": "wwwnc.cdc.gov_en_all", "version": "2024-11", "title": "CDC Health Information", "description": "Disease prevention, travel health", "url": "https://download.kiwix.org/zim/zimit/wwwnc.cdc.gov_en_all_2024-11.zim", "size_mb": 170},
+        {"id": "medlineplus.gov_en_all", "version": "2025-01", "title": "MedlinePlus", "description": "NIH consumer health encyclopedia", "url": "https://download.kiwix.org/zim/zimit/medlineplus.gov_en_all_2025-01.zim", "size_mb": 1800}
+      ]
+    },
+    {
+      "name": "Survival & Preparedness",
+      "slug": "survival",
+      "icon": "shield",
+      "description": "Emergency preparedness and survival skills",
+      "resources": [
+        {"id": "canadian_prepper_winterprepping_en", "version": "2026-02", "title": "Canadian Prepper: Winter Prepping", "description": "Winter survival video guides", "url": "https://download.kiwix.org/zim/videos/canadian_prepper_winterprepping_en_2026-02.zim", "size_mb": 1340},
+        {"id": "canadian_prepper_bugoutroll_en", "version": "2025-08", "title": "Canadian Prepper: Bug Out Roll", "description": "Essential gear selection", "url": "https://download.kiwix.org/zim/videos/canadian_prepper_bugoutroll_en_2025-08.zim", "size_mb": 975}
+      ]
+    },
+    {
+      "name": "Education & Reference",
+      "slug": "education",
+      "icon": "school",
+      "description": "Encyclopedias, textbooks, and educational content",
+      "resources": [
+        {"id": "wikibooks_en_all_nopic", "version": "2026-01", "title": "Wikibooks", "description": "Open-content textbooks", "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_nopic_2026-01.zim", "size_mb": 3100},
+        {"id": "libretexts.org_en_math", "version": "2026-01", "title": "LibreTexts Mathematics", "description": "Math textbooks from algebra to calculus", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_math_2026-01.zim", "size_mb": 792},
+        {"id": "libretexts.org_en_phys", "version": "2026-01", "title": "LibreTexts Physics", "description": "Physics courses and textbooks", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_phys_2026-01.zim", "size_mb": 534},
+        {"id": "libretexts.org_en_chem", "version": "2025-01", "title": "LibreTexts Chemistry", "description": "Chemistry courses and textbooks", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_chem_2025-01.zim", "size_mb": 2180},
+        {"id": "libretexts.org_en_bio", "version": "2025-01", "title": "LibreTexts Biology", "description": "Biology courses and textbooks", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_bio_2025-01.zim", "size_mb": 2240}
+      ]
+    },
+    {
+      "name": "DIY & Repair",
+      "slug": "diy",
+      "icon": "tool",
+      "description": "Repair guides, home improvement, and electronics",
+      "resources": [
+        {"id": "woodworking.stackexchange.com_en_all", "version": "2026-02", "title": "Woodworking Q&A", "description": "Stack Exchange Q&A for carpentry", "url": "https://download.kiwix.org/zim/stack_exchange/woodworking.stackexchange.com_en_all_2026-02.zim", "size_mb": 99},
+        {"id": "mechanics.stackexchange.com_en_all", "version": "2026-02", "title": "Motor Vehicle Maintenance Q&A", "description": "Car and motorcycle repair", "url": "https://download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-02.zim", "size_mb": 321},
+        {"id": "diy.stackexchange.com_en_all", "version": "2026-02", "title": "DIY & Home Improvement Q&A", "description": "Home repairs, electrical, plumbing", "url": "https://download.kiwix.org/zim/stack_exchange/diy.stackexchange.com_en_all_2026-02.zim", "size_mb": 1900},
+        {"id": "ifixit_en_all", "version": "2025-12", "title": "iFixit Repair Guides", "description": "Step-by-step repair guides", "url": "https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim", "size_mb": 3380}
+      ]
+    },
+    {
+      "name": "Agriculture & Food",
+      "slug": "agriculture",
+      "icon": "plant",
+      "description": "Gardening, cooking, and food preservation",
+      "resources": [
+        {"id": "foss.cooking_en_all", "version": "2026-02", "title": "FOSS Cooking", "description": "Quick and easy cooking guides", "url": "https://download.kiwix.org/zim/zimit/foss.cooking_en_all_2026-02.zim", "size_mb": 24},
+        {"id": "based.cooking_en_all", "version": "2026-02", "title": "Based.Cooking", "description": "Simple, practical recipes", "url": "https://download.kiwix.org/zim/zimit/based.cooking_en_all_2026-02.zim", "size_mb": 16},
+        {"id": "gardening.stackexchange.com_en_all", "version": "2026-02", "title": "Gardening Q&A", "description": "Growing your own food", "url": "https://download.kiwix.org/zim/stack_exchange/gardening.stackexchange.com_en_all_2026-02.zim", "size_mb": 923},
+        {"id": "cooking.stackexchange.com_en_all", "version": "2026-02", "title": "Cooking Q&A", "description": "Cooking techniques and recipes", "url": "https://download.kiwix.org/zim/stack_exchange/cooking.stackexchange.com_en_all_2026-02.zim", "size_mb": 236}
+      ]
+    },
+    {
+      "name": "Computing & Technology",
+      "slug": "computing",
+      "icon": "code",
+      "description": "Programming tutorials and technical documentation",
+      "resources": [
+        {"id": "freecodecamp_en_all", "version": "2026-02", "title": "freeCodeCamp", "description": "Interactive programming tutorials", "url": "https://download.kiwix.org/zim/freecodecamp/freecodecamp_en_all_2026-02.zim", "size_mb": 8},
+        {"id": "devdocs_en_python", "version": "2026-02", "title": "Python Documentation", "description": "Complete Python reference", "url": "https://download.kiwix.org/zim/devdocs/devdocs_en_python_2026-02.zim", "size_mb": 4},
+        {"id": "devdocs_en_javascript", "version": "2026-01", "title": "JavaScript Documentation", "description": "MDN JavaScript reference", "url": "https://download.kiwix.org/zim/devdocs/devdocs_en_javascript_2026-01.zim", "size_mb": 3},
+        {"id": "devdocs_en_docker", "version": "2026-01", "title": "Docker Documentation", "description": "Docker container reference", "url": "https://download.kiwix.org/zim/devdocs/devdocs_en_docker_2026-01.zim", "size_mb": 2},
+        {"id": "devdocs_en_bash", "version": "2026-01", "title": "Linux Documentation", "description": "Linux command reference", "url": "https://download.kiwix.org/zim/devdocs/devdocs_en_bash_2026-01.zim", "size_mb": 1},
+        {"id": "electronics.stackexchange.com_en_all", "version": "2026-02", "title": "Electronics Q&A", "description": "Circuit design and electrical engineering", "url": "https://download.kiwix.org/zim/stack_exchange/electronics.stackexchange.com_en_all_2026-02.zim", "size_mb": 3800}
+      ]
+    }
+  ]
+}

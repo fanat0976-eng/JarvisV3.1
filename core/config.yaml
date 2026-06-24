@@ -42,6 +42,10 @@ plugins:
     enabled: true
     description: "Система уведомлений"
 
+  watchers:
+    enabled: true
+    description: "Фоновый мониторинг"
+
   tts_bridge:
     enabled: true
     description: "Text-to-Speech (edge-tts)"
@@ -54,13 +58,41 @@ plugins:
     enabled: false
     description: "Шифрованное хранилище (V2.1)"
 
+  android:
+    enabled: true
+    description: "WebSocket мост"
+
+  nomad:
+    enabled: true
+    description: "NOMAD Knowledge Pipeline - content ingestion for RAG"
+
   learning:
     enabled: true
     description: "Auto-learning: facts extraction, command patterns, router optimization"
 
+  agents:
+    enabled: true
+    description: "Multi-agent orchestration: orchestrator + code + research + file_ops"
+
+  graph:
+    enabled: true
+    description: "Knowledge graph: entities + relations (networkx + SQLite)"
+
+  npu:
+    enabled: true
+    description: "Intel NPU acceleration (OpenVINO)"
+
   wizard:
     enabled: true
     description: "First-Run setup wizard"
+
+  benchmark:
+    enabled: true
+    description: "System performance benchmark"
+
+  voice:
+    enabled: true
+    description: "Voice conversation: STT + TTS loop, video transcription"
 
 ollama:
   url: "http://localhost:11434"
@@ -68,3 +100,8 @@ ollama:
 
 workspace: "./workspace"
 data_dir: "./data"
+
+languages:
+  default: "ru"
+  supported: ["ru", "en", "kz"]
+  auto_detect: true

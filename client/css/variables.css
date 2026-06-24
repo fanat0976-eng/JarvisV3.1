@@ -1,0 +1,36 @@
+:root {
+  --bg: #000a14;
+  --bg-deep: #000610;
+  --bg-panel: #000d1a;
+  --bg-panel2: #001020;
+  --bg-msg-user: #001830;
+  --bg-msg-ai: #000c18;
+  
+  --border: #003366;
+  --border-bright: #0055aa;
+  --border-glow: #0088ff;
+  
+  --blue: #00d4ff;
+  --blue-bright: #40e8ff;
+  --blue-dim: #004466;
+  --blue-glow: rgba(0, 212, 255, 0.15);
+  
+  --accent: #0088ff;
+  --text: #b0e8ff;
+  --text-bright: #e0f8ff;
+  --text-dim: #336688;
+  --text-muted: #1a3a55;
+  
+  --green: #3fb950;
+  --red: #ff3b30;
+  --yellow: #ffd60a;
+  
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+  --font-hud: 'Orbitron', sans-serif;
+  --font-ui: 'Rajdhani', sans-serif;
+  
+  --radius: 3px;
+  --titlebar-h: 42px;
+  --side-w: 220px;
+  --statusbar-h: 28px;
+}
