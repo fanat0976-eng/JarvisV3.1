@@ -1,0 +1,13 @@
+{
+  "name": "jarvis-v3.1-client",
+  "version": "3.1.0",
+  "description": "JARVIS V3.1 Electron Client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3"
+  }
+}

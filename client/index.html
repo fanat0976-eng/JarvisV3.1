@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://localhost:8003 http://127.0.0.1:8003 ws://localhost:8003 ws://127.0.0.1:8003; connect-src 'self' http://localhost:8003 http://127.0.0.1:8003 ws://localhost:8003 ws://127.0.0.1:8003; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'">
+  <title>J.A.R.V.I.S V3.1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div id="app">
+    <header id="titlebar">
+      <div class="logo">
+        <span class="logo-text">JARVIS</span>
+        <span class="logo-version">V3.1</span>
+      </div>
+      <div class="status-ring" id="status-ring">
+        <div class="status-ring-inner"></div>
+        <span class="status-text" id="status-text">ОЖИДАНИЕ</span>
+      </div>
+      <div class="model-badge" id="model-badge">QWEN2.5:14B</div>
+      <div class="spacer"></div>
+      <div class="notif-bell" id="notif-bell" onclick="App.toggleNotifications()">
+        🔔
+        <span class="notif-badge" id="notif-badge" style="display:none">0</span>
+      </div>
+      <div class="window-controls">
+        <button class="win-btn" id="btn-minimize">─</button>
+        <button class="win-btn" id="btn-maximize">□</button>
+        <button class="win-btn win-btn-close" id="btn-close">✕</button>
+      </div>
+    </header>
+
+    <div class="notif-panel" id="notif-panel" style="display:none">
+      <div class="notif-header">
+        <span class="notif-title">УВЕДОМЛЕНИЯ</span>
+        <button class="notif-clear" onclick="App.clearNotifications()">ОЧИСТИТЬ</button>
+      </div>
+      <div id="notif-list" class="notif-list"></div>
+    </div>
+
+    <main id="main-area">
+      <nav id="side-panel">
+        <div class="nav-section">
+          <div class="nav-title">НАВИГАЦИЯ</div>
+          <div id="nav-list"></div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-title">УПРАВЛЕНИЕ</div>
+          <div class="controls">
+            <button class="ctrl-btn" id="btn-agent">АГЕНТ</button>
+            <button class="ctrl-btn" id="btn-memory">ПАМЯТЬ</button>
+            <button class="ctrl-btn" id="btn-tts">ОЗВУЧКА</button>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-title">МОДУЛИ</div>
+          <div id="plugins-list" class="plugins-grid"></div>
+        </div>
+        <div class="nav-section nav-bottom">
+          <div class="nav-title">НАСТРОЙКИ</div>
+          <input type="text" id="cfg-server" placeholder="URL сервера" value="http://127.0.0.1:8003">
+          <input type="text" id="cfg-key" placeholder="Ключ доступа" value="jarvis-v3.1">
+        </div>
+      </nav>
+
+      <div id="content-area">
+        <div id="chat-panel">
+          <div id="messages">
+            <div class="welcome">
+              <div class="welcome-logo">JARVIS</div>
+              <div class="welcome-sub">VERSION 3.1 AI OS</div>
+              <div class="welcome-divider"></div>
+              <div class="welcome-hint">СИСТЕМА ГОТОВА</div>
+            </div>
+          </div>
+          <div id="input-area">
+            <textarea id="user-input" rows="1" placeholder="Введите команду..."></textarea>
+            <button class="input-btn" id="btn-mic" title="Голосовой ввод">🎤</button>
+            <button class="input-btn" id="btn-websearch" title="Поиск в интернете" onclick="Chat.webSearch()">🔍</button>
+            <button class="input-btn" id="btn-send">▶</button>
+            <button class="input-btn input-btn-stop" id="btn-stop" style="display:none">⏹</button>
+          </div>
+        </div>
+        <div id="divider"></div>
+        <div id="workspace-panel">
+          <div class="workspace-placeholder">
+            <div class="placeholder-title">РАБОЧАЯ ОБЛАСТЬ</div>
+            <div class="placeholder-text">ВЫБЕРИТЕ СТРАНИЦУ</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer id="statusbar">
+      <span id="status-message">СИСТЕМА ГОТОВА</span>
+      <span class="spacer"></span>
+      <span id="plugin-count">PLUGINS: 0/0</span>
+    </footer>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
