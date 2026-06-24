@@ -1,0 +1,38 @@
+services:
+  jarvis:
+    build: .
+    container_name: jarvis-server
+    ports:
+      - "8003:8003"
+    volumes:
+      - jarvis-data:/app/data
+      - jarvis-workspace:/app/workspace
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: jarvis-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  jarvis-data:
+  jarvis-workspace:
+  ollama-data:

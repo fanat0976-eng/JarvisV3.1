@@ -1,0 +1,127 @@
+std
+Module
+env
+Copy item path
+1.0.0
+·
+Source
+Expand description
+Inspection and manipulation of the process’s environment.
+This module contains functions to inspect various aspects such as
+environment variables, process arguments, the current directory, and various
+other important directories.
+There are several functions and structs in this module that have a
+counterpart ending in
+os
+. Those ending in
+os
+will return an
+OsString
+and those without will return a
+String
+.
+Modules
+§
+consts
+Constants associated with the current target
+Structs
+§
+Args
+An iterator over the arguments of a process, yielding a
+String
+value for
+each argument.
+ArgsOs
+An iterator over the arguments of a process, yielding an
+OsString
+value
+for each argument.
+Join
+Paths
+Error
+The error type for operations on the
+PATH
+variable. Possibly returned from
+env::join_paths()
+.
+Split
+Paths
+An iterator that splits an environment variable into paths according to
+platform-specific conventions.
+Vars
+An iterator over a snapshot of the environment variables of this process.
+VarsOs
+An iterator over a snapshot of the environment variables of this process.
+Enums
+§
+VarError
+The error type for operations interacting with environment variables.
+Possibly returned from
+env::var()
+.
+Functions
+§
+args
+Returns the arguments that this program was started with (normally passed
+via the command line).
+args_os
+Returns the arguments that this program was started with (normally passed
+via the command line).
+current_
+dir
+Returns the current working directory as a
+PathBuf
+.
+current_
+exe
+Returns the full filesystem path of the current running executable.
+home_
+dir
+Returns the path of the current user’s home directory if known.
+join_
+paths
+Joins a collection of
+Path
+s appropriately for the
+PATH
+environment variable.
+remove_
+var
+⚠
+Removes an environment variable from the environment of the currently running process.
+set_
+current_
+dir
+Changes the current working directory to the specified path.
+set_var
+⚠
+Sets the environment variable
+key
+to the value
+value
+for the currently running
+process.
+split_
+paths
+Parses input according to platform conventions for the
+PATH
+environment variable.
+temp_
+dir
+Returns the path of a temporary directory.
+var
+Fetches the environment variable
+key
+from the current process.
+var_os
+Fetches the environment variable
+key
+from the current process, returning
+None
+if the variable isn’t set or if there is another error.
+vars
+Returns an iterator of (variable, value) pairs of strings, for all the
+environment variables of the current process.
+vars_os
+Returns an iterator of (variable, value) pairs of OS strings, for all the
+environment variables of the current process.

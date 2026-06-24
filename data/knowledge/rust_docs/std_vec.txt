@@ -1,0 +1,187 @@
+std
+Module
+vec
+Copy item path
+1.0.0
+·
+Source
+Expand description
+A contiguous growable array type with heap-allocated contents, written
+Vec<T>
+.
+Vectors have
+O
+(1) indexing, amortized
+O
+(1) push (to the end) and
+O
+(1) pop (from the end).
+Vectors ensure they never allocate more than
+isize::MAX
+bytes.
+§
+Examples
+You can explicitly create a
+Vec
+with
+Vec::new
+:
+let
+v: Vec<i32> = Vec::new();
+…or by using the
+vec!
+macro:
+let
+v: Vec<i32> =
+vec!
+[];
+let
+v =
+vec!
+[
+1
+,
+2
+,
+3
+,
+4
+,
+5
+];
+let
+v =
+vec!
+[
+0
+;
+10
+];
+// ten zeroes
+You can
+push
+values onto the end of a vector (which will grow the vector
+as needed):
+let
+mut
+v =
+vec!
+[
+1
+,
+2
+];
+v.push(
+3
+);
+Popping values works in much the same way:
+let
+mut
+v =
+vec!
+[
+1
+,
+2
+];
+let
+two = v.pop();
+Vectors also support indexing (through the
+Index
+and
+IndexMut
+traits):
+let
+mut
+v =
+vec!
+[
+1
+,
+2
+,
+3
+];
+let
+three = v[
+2
+];
+v[
+1
+] = v[
+1
+] +
+5
+;
+§
+Memory layout
+When the type is non-zero-sized and the capacity is nonzero,
+Vec
+uses the
+Global
+allocator for its allocation. It is valid to convert both ways between such a
+Vec
+and a raw
+pointer allocated with the
+Global
+allocator, provided that the
+Layout
+used with the
+allocator is correct for a sequence of
+capacity
+elements of the type, and the first
+len
+values pointed to by the raw pointer are valid. More precisely, a
+ptr: *mut T
+that has been
+allocated with the
+Global
+allocator with
+Layout::array::<T>(capacity)
+may
+be converted into a vec using
+Vec::<T>::from_raw_parts(ptr, len, capacity)
+. Conversely, the memory
+backing a
+value: *mut T
+obtained from
+Vec::<T>::as_mut_ptr
+may be deallocated using the
+Global
+allocator with the same layout.
+For zero-sized types (ZSTs), or when the capacity is zero, the
+Vec
+pointer must be non-null
+and sufficiently aligned. The recommended way to build a
+Vec
+of ZSTs if
+vec!
+cannot be
+used is to use
+ptr::NonNull::dangling
+.
+Structs
+§
+Drain
+A draining iterator for
+Vec<T>
+.
+Extract
+If
+An iterator which uses a closure to determine if an element should be removed.
+Into
+Iter
+An iterator that moves out of a vector.
+Splice
+A splicing iterator for
+Vec
+.
+Vec
+A contiguous growable array type, written as
+Vec<T>
+, short for ‘vector’.
+PeekMut
+Experimental
+Structure wrapping a mutable reference to the last item in a
+Vec
+.
