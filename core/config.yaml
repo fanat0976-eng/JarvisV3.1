@@ -1,0 +1,70 @@
+server:
+  host: "0.0.0.0"
+  port: 8003
+  auth_key: "jarvis-v3.1"
+  title: "J.A.R.V.I.S V3.1 — AI OS"
+  cors_origins:
+    - "http://localhost:8003"
+    - "http://127.0.0.1:8003"
+    - "*"
+
+plugins:
+  brain:
+    enabled: true
+    description: "Ядро мышления: router + context + personality + tools"
+    model: "qwen2.5:7b"
+    model_simple: "gemma2:2b"
+    model_code: "hf.co/yuxinlu1/gemma-4-12B-coder-fable5-composer2.5-v1-GGUF:Q4_K_M"
+    temperature: 0.7
+    max_context_tokens: 4096
+    tool_call_format: "regex"
+
+  memory_v2:
+    enabled: true
+    description: "Долгосрочная память: facts, entities, consolidation"
+    consolidation_interval_hours: 24
+    max_facts_per_entity: 50
+    fact_confidence_threshold: 0.7
+
+  files:
+    enabled: true
+    description: "Файловые операции"
+
+  web:
+    enabled: true
+    description: "Веб-поиск DuckDuckGo"
+
+  rag:
+    enabled: true
+    description: "ChromaDB + Ollama embeddings (nomic-embed-text)"
+
+  notifications:
+    enabled: true
+    description: "Система уведомлений"
+
+  tts_bridge:
+    enabled: true
+    description: "Text-to-Speech (edge-tts)"
+
+  stt:
+    enabled: true
+    description: "Whisper STT"
+
+  matryoshka:
+    enabled: false
+    description: "Шифрованное хранилище (V2.1)"
+
+  learning:
+    enabled: true
+    description: "Auto-learning: facts extraction, command patterns, router optimization"
+
+  wizard:
+    enabled: true
+    description: "First-Run setup wizard"
+
+ollama:
+  url: "http://localhost:11434"
+  default_model: "qwen2.5:14b"
+
+workspace: "./workspace"
+data_dir: "./data"

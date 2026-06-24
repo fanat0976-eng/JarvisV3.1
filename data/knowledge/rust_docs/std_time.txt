@@ -1,0 +1,105 @@
+std
+Module
+time
+Copy item path
+1.3.0
+·
+Source
+Expand description
+Temporal quantification.
+§
+Examples
+There are multiple ways to create a new
+Duration
+:
+let
+five_seconds = Duration::from_secs(
+5
+);
+assert_eq!
+(five_seconds, Duration::from_millis(
+5_000
+));
+assert_eq!
+(five_seconds, Duration::from_micros(
+5_000_000
+));
+assert_eq!
+(five_seconds, Duration::from_nanos(
+5_000_000_000
+));
+let
+ten_seconds = Duration::from_secs(
+10
+);
+let
+seven_nanos = Duration::from_nanos(
+7
+);
+let
+total = ten_seconds + seven_nanos;
+assert_eq!
+(total, Duration::new(
+10
+,
+7
+));
+Using
+Instant
+to calculate how long a function took to run:
+ⓘ
+let
+now = Instant::now();
+// Calling a slow function, it may take a while
+slow_function();
+let
+elapsed_time = now.elapsed();
+println!
+(
+"Running slow_function() took {} seconds."
+, elapsed_time.as_secs());
+Structs
+§
+Duration
+A
+Duration
+type to represent a span of time, typically used for system
+timeouts.
+Instant
+A measurement of a monotonically nondecreasing clock.
+Opaque and useful only with
+Duration
+.
+System
+Time
+A measurement of the system clock, useful for talking to
+external entities like the file system or other processes.
+System
+Time
+Error
+An error returned from the
+duration_since
+and
+elapsed
+methods on
+SystemTime
+, used to learn how far in the opposite direction a system time
+lies.
+TryFrom
+Float
+Secs
+Error
+An error which can be returned when converting a floating-point value of seconds
+into a
+Duration
+.
+Constants
+§
+UNIX_
+EPOCH
+An anchor in time which can be used to create new
+SystemTime
+instances or
+learn about where in time a
+SystemTime
+lies.

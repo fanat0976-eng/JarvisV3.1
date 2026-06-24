@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S V3.1</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#58a6ff;--accent2:#1f6feb;--green:#3fb950;--red:#f85149;--orange:#d29922;--radius:8px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column}
+.app{display:flex;height:100vh}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.sidebar-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sidebar-header h1{font-size:16px;font-weight:600}
+.sidebar-header .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.sidebar-nav{flex:1;padding:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);cursor:pointer;color:var(--text2);transition:.15s;font-size:14px}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--accent2);color:#fff}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.active{display:flex}
+.page-header{padding:16px 20px;border-bottom:1px solid var(--border);font-size:15px;font-weight:600}
+.page-body{flex:1;overflow-y:auto;padding:20px}
+
+/* Chat */
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:75%;padding:10px 16px;border-radius:16px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.msg.user{align-self:flex-end;background:var(--accent2);color:#fff;border-bottom-right-radius:4px}
+.msg.assistant{align-self:flex-start;background:var(--surface2);border-bottom-left-radius:4px}
+.msg pre{background:var(--bg);padding:8px;border-radius:6px;overflow-x:auto;font-size:12px;margin:6px 0}
+.msg code{font-family:'SF Mono',Monaco,monospace;font-size:12px}
+.msg .typing{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--text2);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.chat-input{display:flex;gap:8px;padding:16px 20px;border-top:1px solid var(--border);background:var(--surface)}
+.chat-input input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;color:var(--text);font-size:14px;outline:none}
+.chat-input input:focus{border-color:var(--accent)}
+.chat-input button{background:var(--accent2);color:#fff;border:none;border-radius:var(--radius);padding:10px 20px;cursor:pointer;font-size:14px;font-weight:500}
+.chat-input button:hover{background:var(--accent)}
+.chat-input button:disabled{opacity:.5;cursor:not-allowed}
+.chat-bar{display:flex;gap:8px;padding:0 20px 8px;background:var(--surface)}
+.chat-bar label{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer}
+
+/* Memory */
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fact-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.fact-card .key{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.fact-card .value{font-size:14px;line-height:1.4}
+.fact-card .meta{font-size:11px;color:var(--text2);margin-top:8px;display:flex;justify-content:space-between}
+.fact-card .delete{color:var(--red);cursor:pointer;font-size:12px}
+.add-fact{display:flex;gap:8px;margin-bottom:16px}
+.add-fact input{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text);font-size:13px;outline:none;flex:1}
+.add-fact button{background:var(--accent2);color:#fff;border:none;border-radius:var(--radius);padding:8px 16px;cursor:pointer;font-size:13px}
+
+/* Files */
+.file-list{display:flex;flex-direction:column;gap:2px}
+.file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);cursor:pointer;font-size:14px;transition:.1s}
+.file-item:hover{background:var(--surface2)}
+.file-item .icon{font-size:18px;width:24px;text-align:center}
+.file-item .name{flex:1}
+.file-item .size{font-size:12px;color:var(--text2)}
+.breadcrumb{display:flex;gap:4px;margin-bottom:12px;font-size:13px;color:var(--text2);flex-wrap:wrap}
+.breadcrumb span{cursor:pointer;color:var(--accent)}
+.breadcrumb span:hover{text-decoration:underline}
+
+/* Status */
+.status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.status-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.status-card .label{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.status-card .value{font-size:24px;font-weight:600}
+.status-card .value.green{color:var(--green)}
+.status-card .value.orange{color:var(--orange)}
+.status-card .value.red{color:var(--red)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;width:90%;max-width:500px;max-height:80vh;overflow-y:auto}
+.modal h3{margin-bottom:16px;font-size:16px}
+.modal pre{background:var(--bg);padding:12px;border-radius:var(--radius);font-size:12px;overflow-x:auto;white-space:pre-wrap}
+.modal .close{float:right;cursor:pointer;color:var(--text2);font-size:18px}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty svg{width:48px;height:48px;margin-bottom:12px;opacity:.5}
+.empty p{font-size:14px}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="dot"></div>
+      <h1>J.A.R.V.I.S</h1>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" data-page="chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Чат
+      </div>
+      <div class="nav-item" data-page="memory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+        Память
+      </div>
+      <div class="nav-item" data-page="files">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Файлы
+      </div>
+      <div class="nav-item" data-page="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        Статус
+      </div>
+      <div class="nav-item" data-page="plugins">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Плагины
+      </div>
+    </div>
+    <div style="padding:12px;border-top:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text2)">Сервер</div>
+      <input id="serverUrl" value="http://localhost:8003" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-size:12px;margin-top:4px;outline:none">
+      <div style="display:flex;gap:4px;margin-top:6px">
+        <input id="authKey" value="jarvis-v3.1" placeholder="auth key" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-size:12px;outline:none">
+        <button onclick="testConnection()" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);cursor:pointer;font-size:11px">OK</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- Chat -->
+    <div class="page active" id="page-chat">
+      <div class="chat-bar">
+        <label><input type="checkbox" id="streamMode" checked> Streaming</label>
+        <label><input type="checkbox" id="agentMode"> Агент</label>
+        <select id="chatLang" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--text);font-size:11px;margin-left:8px">
+          <option value="">Auto</option>
+          <option value="ru">RU</option>
+          <option value="en">EN</option>
+          <option value="kz">KZ</option>
+        </select>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="empty"><p>Привет! Я Jarvis. Задайте вопрос.</p></div>
+      </div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="voiceBtn" onclick="toggleVoice()" title="Голос" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;cursor:pointer;font-size:16px">🎤</button>
+        <button id="sendBtn" onclick="sendChat()">Отправить</button>
+      </div>
+    </div>
+
+    <!-- Memory -->
+    <div class="page" id="page-memory">
+      <div class="page-header">Память <button onclick="loadFacts()" style="float:right;background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px">Обновить</button></div>
+      <div class="page-body">
+        <div class="add-fact">
+          <input id="factKey" placeholder="Ключ">
+          <input id="factValue" placeholder="Значение">
+          <button onclick="addFact()">Добавить</button>
+        </div>
+        <div class="facts-grid" id="factsGrid"></div>
+      </div>
+    </div>
+
+    <!-- Files -->
+    <div class="page" id="page-files">
+      <div class="page-header">Файлы</div>
+      <div class="page-body">
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="page" id="page-status">
+      <div class="page-header">Системный статус</div>
+      <div class="page-body">
+        <div class="status-grid" id="statusGrid"></div>
+      </div>
+    </div>
+
+    <!-- Plugins -->
+    <div class="page" id="page-plugins">
+      <div class="page-header">Community Plugins <button onclick="loadPlugins()" style="float:right;background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px">Обновить</button></div>
+      <div class="page-body" id="pluginsBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h3 id="modalTitle"></h3>
+    <pre id="modalContent"></pre>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+function apiUrl(path) {
+  return ($('#serverUrl').value || 'http://localhost:8003') + path;
+}
+
+function apiHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'X-Auth-Key': $('#authKey').value || ''
+  };
+}
+
+async function api(path, opts = {}) {
+  const r = await fetch(apiUrl(path), { headers: apiHeaders(), ...opts });
+  return r.json();
+}
+
+// Navigation
+$$('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    $$('.nav-item').forEach(n => n.classList.remove('active'));
+    $$('.page').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    $(`#page-${el.dataset.page}`).classList.add('active');
+    if (el.dataset.page === 'chat') { /* chat page */ }
+    if (el.dataset.page === 'memory') loadFacts();
+    if (el.dataset.page === 'files') loadFiles();
+    if (el.dataset.page === 'status') loadStatus();
+    if (el.dataset.page === 'plugins') loadPlugins();
+  });
+});
+
+// Connection test
+async function testConnection() {
+  try {
+    const d = await api('/health');
+    alert(`OK! Плагинов: ${d.plugins_loaded}, версия: ${d.version}`);
+  } catch (e) {
+    alert('Ошибка: ' + e.message);
+  }
+}
+
+// Chat
+let chatHistory = [];
+
+async function sendChat() {
+  const input = $('#chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  const isAgent = $('#agentMode').checked;
+  const isStream = $('#streamMode').checked;
+  const lang = $('#chatLang')?.value || '';
+
+  // Clear empty state
+  if (chatHistory.length === 0) {
+    $('#chatMessages').innerHTML = '';
+  }
+
+  chatHistory.push({ role: 'user', content: text });
+  appendMsg('user', text);
+
+  $('#sendBtn').disabled = true;
+  const loadingId = appendMsg('assistant', '', true);
+
+  try {
+    if (isStream && !isAgent) {
+      await streamChat(text, loadingId);
+    } else if (isAgent) {
+      await agentChat(text, loadingId);
+    } else {
+      await normalChat(text, loadingId);
+    }
+  } catch (e) {
+    updateMsg(loadingId, 'Ошибка: ' + e.message);
+  }
+
+  $('#sendBtn').disabled = false;
+  input.focus();
+}
+
+async function normalChat(text, msgId) {
+  const lang = $('#chatLang')?.value || '';
+  const d = await api('/brain/chat', {
+    method: 'POST',
+    body: JSON.stringify({ messages: chatHistory, use_memory: true, language: lang || undefined })
+  });
+  updateMsg(msgId, d.reply || d.error || 'Пустой ответ');
+  if (d.reply) chatHistory.push({ role: 'assistant', content: d.reply });
+}
+
+async function streamChat(text, msgId) {
+  const lang = $('#chatLang')?.value || '';
+  const r = await fetch(apiUrl('/brain/chat/stream'), {
+    method: 'POST',
+    headers: apiHeaders(),
+    body: JSON.stringify({ messages: chatHistory, use_memory: true, language: lang || undefined })
+  });
+
+  const reader = r.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let fullText = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop();
+
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break;
+        try {
+          const j = JSON.parse(data);
+          if (j.content) {
+            fullText += j.content;
+            updateMsg(msgId, fullText, true);
+          }
+        } catch {}
+      }
+    }
+  }
+
+  updateMsg(msgId, fullText);
+  if (fullText) chatHistory.push({ role: 'assistant', content: fullText });
+}
+
+async function agentChat(text, msgId) {
+  const lang = $('#chatLang')?.value || '';
+  const d = await api('/brain/agent', {
+    method: 'POST',
+    body: JSON.stringify({ messages: chatHistory, max_iterations: 3, language: lang || undefined })
+  });
+  let reply = d.reply || d.error || 'Пустой ответ';
+  if (d.tool_results && d.tool_results.length) {
+    reply += '\n\n🔧 Инструменты: ' + d.tool_results.map(t => t.tool + (t.status === 'ok' ? ' ✓' : ' ✗')).join(', ');
+  }
+  updateMsg(msgId, reply);
+  chatHistory.push({ role: 'assistant', content: reply });
+}
+
+function appendMsg(role, text, loading = false) {
+  const id = 'msg-' + Date.now();
+  const el = document.createElement('div');
+  el.className = `msg ${role}`;
+  el.id = id;
+  el.textContent = text;
+  if (loading) el.innerHTML = '<span class="typing"></span>';
+  $('#chatMessages').appendChild(el);
+  $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
+  return id;
+}
+
+function updateMsg(id, text, streaming = false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  if (streaming) {
+    el.textContent = text + ' ';
+    const dot = document.createElement('span');
+    dot.className = 'typing';
+    el.appendChild(dot);
+  }
+  $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
+}
+
+// Memory
+async function loadFacts() {
+  const d = await api('/memory_v2/facts/get', {
+    method: 'POST',
+    body: JSON.stringify({ entity: 'user' })
+  });
+  const facts = d.facts || [];
+  const grid = $('#factsGrid');
+  if (facts.length === 0) {
+    grid.innerHTML = '<div class="empty"><p>Память пуста</p></div>';
+    return;
+  }
+  grid.innerHTML = facts.map(f => `
+    <div class="fact-card">
+      <div class="key">${esc(f.key)}</div>
+      <div class="value">${esc(f.value)}</div>
+      <div class="meta">
+        <span>${f.confidence ? Math.round(f.confidence * 100) + '%' : ''}</span>
+        <span class="delete" onclick="deleteFact('${esc(f.key)}')">Удалить</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function addFact() {
+  const key = $('#factKey').value.trim();
+  const value = $('#factValue').value.trim();
+  if (!key || !value) return;
+  await api('/memory_v2/facts', {
+    method: 'POST',
+    body: JSON.stringify({ entity: 'user', key, value })
+  });
+  $('#factKey').value = '';
+  $('#factValue').value = '';
+  loadFacts();
+}
+
+async function deleteFact(key) {
+  await api('/memory_v2/facts/delete', {
+    method: 'POST',
+    body: JSON.stringify({ entity: 'user', key })
+  });
+  loadFacts();
+}
+
+// Files
+let currentPath = 'workspace';
+
+async function loadFiles(path) {
+  if (path !== undefined) currentPath = path;
+  const d = await api('/files/ls', {
+    method: 'POST',
+    body: JSON.stringify({ path: currentPath })
+  });
+  const items = d.items || [];
+
+  // Breadcrumb
+  const parts = currentPath.split('/');
+  let bc = '<span onclick="loadFiles(\'workspace\')">workspace</span>';
+  let accumulated = 'workspace';
+  for (let i = 1; i < parts.length; i++) {
+    accumulated += '/' + parts[i];
+    const p = accumulated;
+    bc += ` / <span onclick="loadFiles('${esc(p)}')">${esc(parts[i])}</span>`;
+  }
+  $('#breadcrumb').innerHTML = bc;
+
+  // File list
+  if (items.length === 0) {
+    $('#fileList').innerHTML = '<div class="empty"><p>Папка пуста</p></div>';
+    return;
+  }
+  const dirs = items.filter(i => i.is_dir).sort((a, b) => a.name.localeCompare(b.name));
+  const files = items.filter(i => !i.is_dir).sort((a, b) => a.name.localeCompare(b.name));
+
+  $('#fileList').innerHTML = '';
+  const html = [...dirs, ...files].map(f => {
+    const icon = f.is_dir ? '📁' : fileIcon(f.name);
+    const size = f.is_dir ? '' : formatSize(f.size);
+    const action = f.is_dir
+      ? `loadFiles('${esc(f.path)}')`
+      : `viewFile('${esc(f.path)}','${esc(f.name)}')`;
+    return `<div class="file-item" onclick="${action}">
+      <span class="icon">${icon}</span>
+      <span class="name">${esc(f.name)}</span>
+      <span class="size">${size}</span>
+    </div>`;
+  }).join('');
+  $('#fileList').innerHTML = html;
+}
+
+async function viewFile(path, name) {
+  const d = await api('/files/read', {
+    method: 'POST',
+    body: JSON.stringify({ path })
+  });
+  $('#modalTitle').textContent = name;
+  $('#modalContent').textContent = d.text || d.error || JSON.stringify(d, null, 2);
+  $('#modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  $('#modalOverlay').classList.remove('open');
+}
+
+// Status
+async function loadStatus() {
+  const grid = $('#statusGrid');
+  grid.innerHTML = '<div class="empty"><p>Загрузка...</p></div>';
+
+  try {
+    const health = await api('/health');
+    const rag = await api('/rag/health');
+    const brain = await api('/brain/health');
+
+    grid.innerHTML = `
+      <div class="status-card"><div class="label">Статус</div><div class="value green">● Online</div></div>
+      <div class="status-card"><div class="label">Версия</div><div class="value">${health.version}</div></div>
+      <div class="status-card"><div class="label">Плагины</div><div class="value">${health.plugins_loaded}/${health.plugins_total}</div></div>
+      <div class="status-card"><div class="label">RAG документы</div><div class="value">${rag.documents || 0}</div></div>
+      <div class="status-card"><div class="label">Ollama</div><div class="value ${brain.ollama ? 'green' : 'red'}">${brain.ollama ? '● Online' : '● Offline'}</div></div>
+      <div class="status-card"><div class="label">Модель</div><div class="value" style="font-size:14px">${brain.router || '?'}</div></div>
+      <div class="status-card"><div class="label">Модели Ollama</div><div class="value" style="font-size:12px">${(brain.models || []).join(', ') || 'нет'}</div></div>
+      <div class="status-card"><div class="label">Event Bus</div><div class="value">${Object.keys(health.event_bus || {}).length} подписчиков</div></div>
+    `;
+  } catch (e) {
+    grid.innerHTML = `<div class="empty"><p style="color:var(--red)">Ошибка подключения: ${e.message}</p></div>`;
+  }
+}
+
+// Helpers
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function formatSize(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+function fileIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  const icons = {md:'📝',txt:'📄',py:'🐍',js:'📜',json:'📋',yaml:'⚙️',yml:'⚙️',html:'🌐',css:'🎨',sh:'🔧',bat:'🔧',apk:'📱',db:'🗃️',log:'📊'};
+  return icons[ext] || '📄';
+}
+
+// Plugins
+const PLUGIN_ICONS = {weather:'🌤️',reminders:'⏰',clipboard:'📋',system_stats:'💻',todo:'✅'};
+
+async function loadPlugins() {
+  const body = $('#pluginsBody');
+  body.innerHTML = '<div class="empty"><p>Загрузка...</p></div>';
+  try {
+    const data = await api('/plugins/community');
+    const plugins = data.plugins || [];
+    if (plugins.length === 0) {
+      body.innerHTML = '<div class="empty"><p>Нет community-плагинов</p></div>';
+      return;
+    }
+    body.innerHTML = plugins.map(p => `
+      <div class="plugin-card" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:24px">${PLUGIN_ICONS[p.name] || '🔌'}</span>
+          <div>
+            <div style="font-weight:600">${esc(p.name)}</div>
+            <div style="font-size:12px;color:var(--text2)">v${p.version} by ${esc(p.author)}</div>
+          </div>
+          <span style="margin-left:auto;font-size:12px;padding:2px 8px;border-radius:10px;background:${p.loaded ? 'var(--green)' : 'var(--red)'}20;color:${p.loaded ? 'var(--green)' : 'var(--red)'}">${p.loaded ? 'active' : 'inactive'}</span>
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">${esc(p.description)}</div>
+        <div id="plugin-endpoints-${p.name}">
+          <button onclick="loadPluginEndpoints('${p.name}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 10px;color:var(--text);cursor:pointer;font-size:12px">Показать endpoints</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    body.innerHTML = `<div class="empty"><p style="color:var(--red)">Ошибка: ${e.message}</p></div>`;
+  }
+}
+
+async function loadPluginEndpoints(name) {
+  const container = $(`#plugin-endpoints-${name}`);
+  container.innerHTML = '<div style="font-size:12px;color:var(--text2)">Загрузка...</div>';
+
+  const endpoints = [
+    { method: 'GET', path: `/${name}/health`, desc: 'Health check' },
+  ];
+
+  try {
+    const r = await fetch(apiUrl(`/${name}/health`), { headers: apiHeaders() });
+    const d = await r.json();
+    let html = `<div style="font-family:monospace;font-size:12px;margin-top:8px">`;
+    html += `<div style="color:var(--green);margin-bottom:4px">GET /${name}/health → ${JSON.stringify(d).slice(0, 80)}...</div>`;
+
+    if (name === 'weather') {
+      html += `<div style="margin-top:8px"><button onclick="testPluginEndpoint('${name}/current?city=Moscow', 'GET')" style="background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;margin-right:4px">GET /current?city=Moscow</button></div>`;
+    }
+    if (name === 'system_stats') {
+      html += `<div style="margin-top:8px"><button onclick="testPluginEndpoint('${name}/overview', 'GET')" style="background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;margin-right:4px">GET /overview</button></div>`;
+    }
+    if (name === 'todo') {
+      html += `<div style="margin-top:8px"><button onclick="testPluginEndpoint('${name}/list', 'GET')" style="background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;margin-right:4px">GET /list</button></div>`;
+    }
+    if (name === 'clipboard') {
+      html += `<div style="margin-top:8px"><button onclick="testPluginEndpoint('${name}/history', 'GET')" style="background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;margin-right:4px">GET /history</button></div>`;
+    }
+    if (name === 'reminders') {
+      html += `<div style="margin-top:8px"><button onclick="testPluginEndpoint('${name}/list', 'GET')" style="background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;margin-right:4px">GET /list</button></div>`;
+    }
+
+    html += `<div id="plugin-test-result-${name}" style="margin-top:8px;display:none"><pre style="background:var(--bg);padding:8px;border-radius:4px;font-size:11px;max-height:200px;overflow:auto"></pre></div>`;
+    html += `</div>`;
+    container.innerHTML += html;
+  } catch (e) {
+    container.innerHTML += `<div style="color:var(--red);font-size:12px;margin-top:4px">Ошибка: ${e.message}</div>`;
+  }
+}
+
+async function testPluginEndpoint(path, method) {
+  try {
+    const r = await fetch(apiUrl(`/${path}`), { method, headers: apiHeaders() });
+    const d = await r.json();
+    const parts = path.split('/');
+    const name = parts[0];
+    const resultEl = $(`#plugin-test-result-${name}`);
+    if (resultEl) {
+      resultEl.style.display = 'block';
+      resultEl.querySelector('pre').textContent = JSON.stringify(d, null, 2);
+    }
+  } catch (e) {
+    alert('Ошибка: ' + e.message);
+  }
+}
+
+// Voice
+let mediaRecorder = null;
+let audioChunks = [];
+
+async function toggleVoice() {
+  const btn = $('#voiceBtn');
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    btn.textContent = '🎤';
+    btn.style.background = '';
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      await sendVoice(blob);
+    };
+
+    mediaRecorder.start();
+    btn.textContent = '⏹';
+    btn.style.background = 'var(--red)';
+  } catch (e) {
+    alert('Микрофон недоступен: ' + e.message);
+  }
+}
+
+async function sendVoice(audioBlob) {
+  const loadingId = appendMsg('user', '🎤 Голосовой запрос...');
+  const replyId = appendMsg('assistant', '', true);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'voice.webm');
+
+    const r = await fetch(apiUrl('/voice/transcribe/file'), {
+      method: 'POST',
+      headers: { 'X-Auth-Key': $('#authKey').value || '' },
+      body: formData,
+    });
+    const stt = await r.json();
+    const text = stt.text || '';
+
+    if (!text) {
+      updateMsg(replyId, 'Речь не распознана');
+      return;
+    }
+
+    updateMsg(loadingId, '🎤 ' + text);
+
+    const lang = $('#chatLang')?.value || '';
+    chatHistory.push({ role: 'user', content: text });
+
+    if ($('#agentMode').checked) {
+      const d = await api('/brain/agent', {
+        method: 'POST',
+        body: JSON.stringify({ messages: chatHistory, max_iterations: 3, language: lang || undefined })
+      });
+      updateMsg(replyId, d.reply || d.error || 'Ошибка');
+      if (d.reply) chatHistory.push({ role: 'assistant', content: d.reply });
+    } else if ($('#streamMode').checked) {
+      await streamChat(text, replyId);
+    } else {
+      await normalChat(text, replyId);
+    }
+  } catch (e) {
+    updateMsg(replyId, 'Ошибка: ' + e.message);
+  }
+}
+
+// Init
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>

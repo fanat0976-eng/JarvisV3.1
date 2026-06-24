@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          pip install -e ".[rag]"
+
+      - name: Lint with ruff
+        run: |
+          pip install ruff
+          ruff check core/ plugins/ --select E,F --ignore E501,E741
+
+      - name: Run unit tests
+        run: |
+          pytest tests/test_unit.py tests/test_chunker.py tests/test_graph.py tests/test_learning.py tests/test_agents.py tests/test_npu.py tests/test_pipeline.py -v
+
+      - name: Run integration tests (require server)
+        run: |
+          python core/server.py &
+          sleep 5
+          pytest tests/test_rag.py tests/test_brain_rag.py tests/test_nomad.py tests/test_zim_pipeline.py -v
+          kill %1 || true
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t jarvis-v3.1:${{ github.sha }} .
+
+      - name: Test Docker image
+        run: |
+          docker run -d --name jarvis-test -p 8003:8003 jarvis-v3.1:${{ github.sha }}
+          sleep 10
+          curl -f http://localhost:8003/health || exit 1
+          docker stop jarvis-test
