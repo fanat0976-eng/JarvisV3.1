@@ -1,5 +1,4 @@
 """Pytest configuration for Jarvis V3.1 tests."""
-import os
 from pathlib import Path
 
 
