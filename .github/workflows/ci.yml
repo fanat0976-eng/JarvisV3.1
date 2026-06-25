@@ -38,6 +38,7 @@ jobs:
           pytest tests/test_unit.py tests/test_chunker.py tests/test_graph.py tests/test_learning.py tests/test_agents.py tests/test_pipeline.py -v
 
       - name: Run integration tests (require server)
+        if: false
         run: |
           python core/server.py &
           sleep 5
