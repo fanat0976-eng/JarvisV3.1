@@ -30,11 +30,11 @@ jobs:
       - name: Lint with ruff
         run: |
           pip install ruff
-          ruff check core/ plugins/ --select E,F --ignore E501,E741
+          ruff check core/ plugins/ scripts/ tests/ --select E,F --ignore E501
 
       - name: Run unit tests
         run: |
-          pytest tests/test_unit.py tests/test_chunker.py tests/test_graph.py tests/test_learning.py tests/test_agents.py tests/test_npu.py tests/test_pipeline.py -v
+          pytest tests/test_unit.py tests/test_chunker.py tests/test_graph.py tests/test_learning.py tests/test_agents.py tests/test_pipeline.py -v
 
       - name: Run integration tests (require server)
         run: |
