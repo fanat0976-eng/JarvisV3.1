@@ -227,7 +227,7 @@ class TestLanguageDetection:
     def test_supported_languages(self):
         from core.language import get_supported_languages
         langs = get_supported_languages()
-        codes = [l["code"] for l in langs]
+        codes = [lang["code"] for lang in langs]
         assert "ru" in codes
         assert "en" in codes
         assert "kz" in codes

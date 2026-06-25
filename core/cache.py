@@ -53,7 +53,6 @@ class Cache:
 
     def stats(self) -> dict:
         with self._lock:
-            now = time.time()
             total = len(self._store)
             expired = sum(1 for v in self._store.values() if v.is_expired())
             return {"total": total, "active": total - expired, "expired": expired}

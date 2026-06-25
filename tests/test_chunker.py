@@ -1,5 +1,4 @@
 """Tests for text chunker."""
-import pytest
 from plugins.nomad.chunker import chunk_text
 
 

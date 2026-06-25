@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from plugins.learning.fact_extractor import extract_facts, store_extracted_facts, process_message
+from plugins.learning.fact_extractor import extract_facts
 from plugins.learning.command_learner import (
     suggest_command, get_learned_commands, detect_repeated_queries
 )

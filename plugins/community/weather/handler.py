@@ -2,7 +2,7 @@
 Weather plugin — current weather + forecast via Open-Meteo (free, no API key).
 """
 import httpx
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 router = APIRouter()

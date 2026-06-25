@@ -3,7 +3,6 @@ Files plugin — Enhanced filesystem operations.
 Adapted from V2.1 for V3.1.
 """
 import os
-import base64
 import shutil
 import hashlib
 import threading
@@ -237,8 +236,8 @@ async def diff_files(request: Request):
         with open(file_b, "r", encoding="utf-8", errors="replace") as f:
             lines_b = f.readlines()
         diff = list(unified_diff(lines_a, lines_b, fromfile=Path(file_a).name, tofile=Path(file_b).name))
-        return {"diff": "".join(diff), "lines_added": sum(1 for l in diff if l.startswith("+")),
-                "lines_removed": sum(1 for l in diff if l.startswith("-"))}
+        return {"diff": "".join(diff), "lines_added": sum(1 for line in diff if line.startswith("+")),
+                "lines_removed": sum(1 for line in diff if line.startswith("-"))}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 

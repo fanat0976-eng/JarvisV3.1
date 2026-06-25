@@ -3,7 +3,6 @@ RAG plugin — ChromaDB + Ollama embeddings (nomic-embed-text).
 No sentence-transformers dependency.
 """
 import os
-import time
 import uuid
 import httpx
 from pathlib import Path

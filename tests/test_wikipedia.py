@@ -1,5 +1,4 @@
 """Tests for ZIM adapter (formerly Wikipedia adapter)."""
-import pytest
 from plugins.nomad.sources.zim import ZimAdapter
 
 

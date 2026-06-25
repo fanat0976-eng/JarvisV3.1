@@ -2,10 +2,8 @@
 Brain Personality — Адаптивный system prompt.
 Формируется на основе накопленных фактов о пользователе + мультиязычность.
 """
-import sqlite3
 import re
 from pathlib import Path
-from typing import Optional
 
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))

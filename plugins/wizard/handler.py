@@ -5,11 +5,9 @@ Checks system requirements, configures services, verifies connectivity.
 import os
 import shutil
 import httpx
-import subprocess
 from pathlib import Path
 
-from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -47,7 +45,7 @@ def _check_chromadb():
     try:
         import chromadb
         client = chromadb.PersistentClient(path=str(PROJECT_ROOT / "data" / "chroma_db"))
-        col = client.get_or_create_collection("health_check")
+        client.get_or_create_collection("health_check")
         return {"ok": True, "message": "ChromaDB доступен"}
     except Exception as e:
         return {"ok": False, "message": f"ChromaDB: {e}"}

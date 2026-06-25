@@ -78,6 +78,6 @@ def download():
 if __name__ == "__main__":
     print(f"Downloading Russian Wikipedia (NoPic): {ZIM_URL}")
     print(f"Target: {ZIM_PATH}")
-    print(f"Estimated size: ~13.4 GB")
+    print("Estimated size: ~13.4 GB")
     print("=" * 60)
     download()

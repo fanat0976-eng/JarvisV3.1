@@ -2,12 +2,10 @@
 Brain Tool Executor — Исполнение tool calls из ответов LLM.
 Расширение V2.1: добавлены memory tools для агента.
 """
-import json
 import os
 import re
 import shutil
 from pathlib import Path
-from typing import Any
 
 WORKSPACE = str(Path(__file__).parent.parent.parent / "workspace")
 

@@ -2,10 +2,7 @@
 Ingest Python stdlib documentation into RAG.
 Downloads docs.python.org pages, extracts text, chunks, and sends to RAG.
 """
-import os
-import sys
 import time
-import json
 import httpx
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -89,7 +86,7 @@ def extract_text(html: str) -> str:
     if not content:
         return ""
     text = content.get_text(separator="\n", strip=True)
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
     return "\n".join(lines)
 
 

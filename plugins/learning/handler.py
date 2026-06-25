@@ -12,7 +12,7 @@ from plugins.learning.command_learner import (
     get_learned_commands, get_pending_suggestions, suggest_command
 )
 from plugins.learning.router_learner import (
-    get_model_scores, get_learning_stats, get_best_model
+    get_model_scores, get_learning_stats
 )
 
 router = APIRouter()

@@ -3,11 +3,9 @@ Plugin Sandbox — Restricted execution environment for community plugins.
 Provides safe API access: events, cache, memory, config, logging.
 Blocks dangerous operations: file system (outside workspace), network (whitelisted), subprocess.
 """
-import os
 import sys
 import importlib
 import importlib.util
-import threading
 import logging
 from pathlib import Path
 from typing import Any, Optional
@@ -224,8 +222,6 @@ class PluginSandbox:
 
                 if url.endswith(".zip"):
                     with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
-                        names = zf.namelist()
-                        top_dir = names[0].split("/")[0] if names else ""
                         zf.extractall(str(COMMUNITY_DIR))
                         return True
                 else:

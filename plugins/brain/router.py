@@ -6,7 +6,6 @@ Reasoning/analysis → мощная модель (qwen2.5:14b)
 Извлечение → средняя модель (qwen2.5:7b)
 """
 from enum import Enum
-from typing import Optional
 
 
 class TaskType(str, Enum):

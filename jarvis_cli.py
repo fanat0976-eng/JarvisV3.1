@@ -2,7 +2,6 @@
 Jarvis CLI — Command-line interface for Jarvis V3.1.
 Plugin management, system checks, benchmarking.
 """
-import os
 import sys
 import io
 import json
@@ -247,8 +246,8 @@ def on_shutdown():
     (plugin_dir / "handler.py").write_text(handler, encoding="utf-8")
 
     print(f"✓ Плагин '{name}' создан: {plugin_dir}")
-    print(f"  plugin.json — манифест")
-    print(f"  handler.py  — код плагина")
+    print("  plugin.json — манифест")
+    print("  handler.py  — код плагина")
 
 
 # ── Main ──

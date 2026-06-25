@@ -2,13 +2,10 @@
 NPU Inference — OpenVINO inference engine с NPU/CPU fallback.
 Конвертация GGUF → OpenVINO IR и inference.
 """
-import os
 import time
-import subprocess
-from pathlib import Path
 
 try:
-    from openvino import Core, CompiledModel
+    from openvino import Core  # noqa: F401
     HAS_OV = True
 except ImportError:
     HAS_OV = False

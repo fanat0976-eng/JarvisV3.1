@@ -2,7 +2,6 @@
 Jarvis V3.1 — Core Server
 FastAPI orchestrator: plugin system, event bus, cache, auth.
 """
-import os
 import sys
 from pathlib import Path
 from contextlib import asynccontextmanager
@@ -37,8 +36,8 @@ async def lifespan(app: FastAPI):
         print(f"  [+] {name}: {info.get('description', '')}")
 
     print(f"  Loaded: {len(loaded_plugins)} plugins")
-    print(f"  Event Bus: ready")
-    print(f"  Cache: ready")
+    print("  Event Bus: ready")
+    print("  Cache: ready")
     print("=" * 60)
 
     event_bus.emit("server.startup", {"plugins": list(loaded_plugins.keys())}, source="core")
@@ -155,7 +154,8 @@ for name, info in loaded_plugins.items():
     if router:
         app.include_router(router, prefix=f"/{name}")
 
-from core.plugin_sandbox import PluginSandbox
+# Community plugins (imported here to avoid circular imports)
+from core.plugin_sandbox import PluginSandbox  # noqa: E402
 community_sandbox = PluginSandbox()
 community_manifests = community_sandbox.discover_community()
 for manifest in community_manifests:

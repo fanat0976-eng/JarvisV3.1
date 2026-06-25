@@ -2,7 +2,6 @@
 System Stats plugin — CPU, RAM, disk, network monitoring.
 Requires: psutil
 """
-import time
 import shutil
 from fastapi import APIRouter
 

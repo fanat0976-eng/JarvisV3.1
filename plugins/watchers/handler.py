@@ -2,15 +2,12 @@
 Watchers plugin — background monitoring.
 Adapted from V2.1 for V3.1.
 """
-import os
 import time
 import asyncio
 import shutil
 import threading
-from pathlib import Path
 from datetime import datetime
-from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -44,7 +41,6 @@ def disk_monitor(interval=300):
         try:
             usage = shutil.disk_usage("/")
             free_gb = usage.free / (1024**3)
-            total_gb = usage.total / (1024**3)
             used_pct = (usage.used / usage.total) * 100
             if used_pct > 95:
                 _emit("disk.critical", {"free_gb": round(free_gb, 1), "used_pct": round(used_pct, 1)})

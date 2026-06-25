@@ -1,6 +1,5 @@
 # plugins/nomad/sources/zim.py
 """ZIM adapter for NOMAD pipeline - supports any Kiwix ZIM file."""
-import os
 import json
 import httpx
 from pathlib import Path
@@ -76,7 +75,6 @@ class ZimAdapter:
             List of article dicts with title, text, url
         """
         import libzim
-        import re
         
         self.pipeline.update_status("parsing", zim_path=str(zim_path))
         articles = []

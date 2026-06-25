@@ -2,7 +2,6 @@
 Brain Context Manager — Управление контекстом разговора.
 Sliding window + compression для длинных сессий.
 """
-from typing import Optional
 
 
 class ContextManager:

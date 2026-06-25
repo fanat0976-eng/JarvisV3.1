@@ -1,6 +1,4 @@
 """Tests for pipeline orchestrator."""
-import pytest
-from pathlib import Path
 from plugins.nomad.pipeline import Pipeline
 
 

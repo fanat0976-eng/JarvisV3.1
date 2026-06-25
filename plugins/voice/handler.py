@@ -4,16 +4,14 @@ Audio → STT (Whisper) → Brain → TTS (edge-tts) → Audio response.
 Also: audio file transcription, video subtitle extraction.
 """
 import os
-import io
 import json
-import uuid
 import tempfile
 import subprocess
 import httpx
 from pathlib import Path
 
 from fastapi import APIRouter, Request, UploadFile, File
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -157,7 +155,7 @@ def _extract_audio_from_video(video_path: str) -> str:
 @router.get("/health")
 def health():
     try:
-        import whisper
+        import whisper  # noqa: F401
         whisper_importable = True
     except ImportError:
         whisper_importable = False

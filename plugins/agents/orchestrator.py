@@ -2,9 +2,7 @@
 Orchestrator — Главный агент, делегирует задачи подагентам.
 Анализирует запрос, выбирает агента, выполняет, возвращает результат.
 """
-import json
 import re
-import time
 import httpx
 
 from plugins.agents.registry import get_agent, classify_task, Agent
@@ -131,7 +129,7 @@ async def orchestrate(task: str, context: list[dict] | None = None) -> dict:
 
 async def _run_orchestrator(task: str, context: list[dict] | None = None) -> dict:
     from plugins.agents.registry import get_agent
-    agent = get_agent("orchestrator") or get_agent("research")
+    _ = get_agent("orchestrator") or get_agent("research")
 
     system_prompt = (
         "Ты — оркестратор Jarvis. Проанализируй задачу и выполни её самостоятельно. "

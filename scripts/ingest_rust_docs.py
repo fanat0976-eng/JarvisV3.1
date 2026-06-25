@@ -2,8 +2,6 @@
 Ingest Rust documentation into RAG.
 Fetches The Rust Book and stdlib docs, extracts text, chunks, sends to RAG.
 """
-import os
-import sys
 import time
 import httpx
 from pathlib import Path
@@ -90,7 +88,7 @@ def extract_text(html: str) -> str:
     if not content:
         return ""
     text = content.get_text(separator="\n", strip=True)
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
     return "\n".join(lines)
 
 

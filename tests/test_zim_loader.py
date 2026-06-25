@@ -1,6 +1,5 @@
 """Tests for ZIM Loader."""
 import pytest
-from pathlib import Path
 from plugins.nomad.sources.zim import ZimAdapter
 
 
