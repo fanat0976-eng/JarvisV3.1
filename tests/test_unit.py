@@ -78,7 +78,7 @@ class TestToolExecutor:
         assert len(calls) == 2
 
     def test_execute_files_ls(self):
-        result = execute_tool_call("tool: files/ls\npath: C:\\Users\\badge\\JarvisV3.1\\workspace")
+        result = execute_tool_call("tool: files/ls\npath: workspace")
         assert result["status"] == "ok"
         assert "items" in result
 
