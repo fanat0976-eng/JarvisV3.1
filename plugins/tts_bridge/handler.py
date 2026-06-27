@@ -2,8 +2,6 @@
 TTS Bridge plugin — edge-tts (Microsoft Neural voices).
 """
 import os
-import uuid
-import asyncio
 from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
