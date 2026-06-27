@@ -3,6 +3,7 @@ TTS Bridge plugin — edge-tts (Microsoft Neural voices).
 """
 import os
 import uuid
+import asyncio
 from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
@@ -49,17 +50,18 @@ async def speak(request: Request):
     voice_id = VOICES.get(voice, "ru-RU-DmitryNeural")
     try:
         import edge_tts
-        filename = f"tts_{uuid.uuid4().hex[:12]}.mp3"
-        filepath = os.path.join(AUDIO_DIR, filename)
         comm = edge_tts.Communicate(text, voice_id)
-        await comm.save(filepath)
-        return {"status": "ok", "filename": filename, "engine": "edge-tts"}
+        audio_data = b""
+        async for chunk in comm.stream():
+            if chunk["type"] == "audio":
+                audio_data += chunk["data"]
+        return StreamingResponse(iter([audio_data]), media_type="audio/mpeg")
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
 
-@router.post("/speak/stream")
-async def speak_stream(request: Request):
+@router.post("/speak/base64")
+async def speak_base64(request: Request):
     data = await request.json()
     text = data.get("text", "")
     voice = data.get("voice", "dmitry")
@@ -68,12 +70,13 @@ async def speak_stream(request: Request):
     voice_id = VOICES.get(voice, "ru-RU-DmitryNeural")
     try:
         import edge_tts
+        import base64
         comm = edge_tts.Communicate(text, voice_id)
         audio_data = b""
         async for chunk in comm.stream():
             if chunk["type"] == "audio":
                 audio_data += chunk["data"]
-        return StreamingResponse(iter([audio_data]), media_type="audio/mpeg")
+        return {"status": "ok", "audio_b64": base64.b64encode(audio_data).decode(), "engine": "edge-tts"}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 

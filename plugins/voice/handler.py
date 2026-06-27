@@ -96,19 +96,14 @@ async def _brain_chat(text: str, session_id: str = "") -> str:
 async def _tts_speak(text: str, voice: str = "dmitry") -> bytes:
     async with httpx.AsyncClient(trust_env=False, timeout=60) as client:
         r = await client.post(
-            f"{BASE_URL}/tts_bridge/speak",
+            f"{BASE_URL}/tts_bridge/speak/base64",
             json={"text": text, "voice": voice},
             headers=_headers(),
         )
         r.raise_for_status()
-        filename = r.json().get("filename", "")
-        if not filename:
-            return b""
-        audio_r = await client.get(
-            f"{BASE_URL}/tts_bridge/audio/{filename}",
-            headers=_headers(),
-        )
-        return audio_r.content
+        import base64
+        audio_b64 = r.json().get("audio_b64", "")
+        return base64.b64decode(audio_b64) if audio_b64 else b""
 
 
 def _extract_video_subtitles(video_path: str) -> dict:
